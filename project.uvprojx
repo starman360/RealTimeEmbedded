@@ -437,6 +437,26 @@
               <FileType>5</FileType>
               <FilePath>.\timing_control.h</FilePath>
             </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Timer.h</FilePath>
+            </File>
+            <File>
+              <FileName>stdVars.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\stdVars.h</FilePath>
+            </File>
+            <File>
+              <FileName>stdVars.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\stdVars.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -7,6 +7,8 @@
 #include "UART.h"
 #include "post.h"
 #include "timing_control.h"
+#include "Timer.h"
+#include "stdVars.h"
 
 #define ENTER_KEY 0x0D
 #define BACKSPACE_KEY 0x7F
@@ -19,8 +21,6 @@
 #define BEGIN_TIMING_TEST "Running timing test"
 #define RUN_TEST_AGAIN "\r\nRun the test again (y|n):"
 
-int lower_limit = 950;
-int upper_limit = 1050;
 
 void controller() {
 	post_routine();
@@ -29,6 +29,12 @@ void controller() {
 		change_limits();
 		wait_enter();
 		USART_Write(USART2, (uint8_t *)BEGIN_TIMING_TEST, strlen(BEGIN_TIMING_TEST));
+		timerEN(1);
+		for (int i = 0; i < 100; i++) {
+			uint8_t buffer[BufferSize]; 
+			int n = sprintf((char *)buffer, "binValue = %d\t", getBinVal(i));
+			USART_Write(USART2, (uint8_t *) buffer, n);
+		}
 		if (run_again()) {
 			break;
 		}
