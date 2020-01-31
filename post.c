@@ -13,18 +13,22 @@ int post_routine() {
 	uint32_t init_time = (uint32_t)getTime();
 	int flag = 1;
 	while(1) {
-		if (getStatus()) {
-			if (getTime() - init_time <= MAX_TIME) {
+		if (getStatus() == 0) {
+			int captured_time = getCapturedTime();
+			// got rising edge within 100ms
+			if (captured_time - init_time <= MAX_TIME) {
 				USART_Write(USART2, (uint8_t *)POST_ROUTINE_COMPLETE, strlen(POST_ROUTINE_COMPLETE));
 				flag = 0;
 				break;
 			}
+			// got a rising edge but took too long
 			else {
 				USART_Write(USART2, (uint8_t *)POST_ROUTINE_FAILED, strlen(POST_ROUTINE_FAILED));
 				break;
 			}
 		}
-		if (getTime() - init_time > MAX_TIME) {
+		// timed out
+		if (getTimeCounter() - init_time > MAX_TIME) {
 			USART_Write(USART2, (uint8_t *)POST_ROUTINE_FAILED, strlen(POST_ROUTINE_FAILED));
 			break;
 		}

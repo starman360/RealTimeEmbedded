@@ -5,47 +5,59 @@ int iter = 0;
 
 void timerInit()
 {
-    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
-    TIM2->PSC |= 0x4F;               // Loading the value 79 into prescaler reg
-    TIM2->EGR |= TIM_EGR_UG;         // Update prescale
+    RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;       // enable clock to timer 2
+    TIM2->PSC |= 80;                            // Loading the value 79 into prescaler reg
+    // Event Generation Register
+    TIM2->EGR |= TIM_EGR_UG;                    // Force update prescale
 
-    TIM2->CCER &= ~TIM_CCER_CC1E;    // Turn Off Timer
-    TIM2->CCMR1 &= ~0xFF;	           // Reset 
-    TIM2->CCMR1 |= TIM_CCMR1_CC1S_0; // Sets TIM_CH1 to TI1
-    TIM2->CCER |= TIM_CCER_CC1E;
-    // TIM2->CCER |= 0x01;              //enable the input
+    // Capture Compare Enable Register
+    TIM2->CCER &= ~TIM_CCER_CC1E;               // Turn off timer
+    // Capture Compare Mode Register
+    TIM2->CCMR1 &= ~TIM_CCMR1_CC1S;             // Clear capture/compare 1 selection bits
+    TIM2->CCMR1 |= TIM_CCMR1_CC1S_0;            // Sets TIM_CH1 to TI1
     
-    // Setting input capture mode to start on rising
-    // TIM2->CCER &= ~(TIM_CCER_CC1NP + TIM_CCER_CC1P);
+    TIM2->CCER &= ~TIM_CCER_CC1P;               // Input capture rising edges               
+    TIM2->CCER |= TIM_CCER_CC1E;                // Enable capture for channel 1
+    
+
 
     // TIM2->DIER |= TIM_DIER_CC1IE; // Interrupt Enable
-		
-	iter = 1000;
+	// iter = 1000;
 }
 
 
 void timerEN(bool val)
 {
     if (val)
-        TIM2->CR1 = 0x1;    // start count
+        TIM2->CR1 |= TIM_CR1_CEN;    // start count
     else
-        TIM2->CR1 = 0x0;    // stop count
+        TIM2->CR1 &= ~TIM_CR1_CEN;    // stop count
 }
 
-int getTime() {
+int getCapturedTime() {
+    // capture/compare register 1
+    // this will clear the CC1IF flag in the SR
     return TIM2->CCR1;
 }
-int getStatus() {
-    return (TIM2->SR & 0x2);
+
+int getTimeCounter() {
+    return TIM2->CNT;
 }
+
+int getStatus() {
+    // status register
+    // CC1IF - capture/compare 1 interrupt flag
+    if (TIM2->SR & TIM_SR_CC1IF) {
+        return 0;
+    }
+    return 1;
+}
+
 void resetTimer(){
     RCC->APB1RSTR1 &= ~(0x1);
 }
 void clearTimeCaptureReg() {
     TIM2->CCR1 = 0;
-}
-void clearCaptureFlag() {
-    TIM2->SR &= ~(0x2);	
 }
 
 void TIM2_IRQHandler(void) {

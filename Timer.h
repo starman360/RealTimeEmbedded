@@ -10,7 +10,8 @@ typedef int bool;
 
 void timerInit(void);
 void timerEN(bool);
-int getTime(void);
+int getCapturedTime(void);
+int getTimeCounter(void);
 int getStatus(void);
 void resetTimer(void);
 void clearTimeCaptureReg(void);
