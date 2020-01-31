@@ -10,6 +10,11 @@ typedef int bool;
 
 void timerInit(void);
 void timerEN(bool);
+int getTime(void);
+int getStatus(void);
+void resetTimer(void);
+void clearTimeCaptureReg(void);
+void clearCaptureFlag(void); 
 int* getBins(void);
 int getBinVal(int);
 #endif

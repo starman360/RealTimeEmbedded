@@ -23,6 +23,7 @@
 
 
 void controller() {
+	USART_Write(USART2, (uint8_t *)"test", strlen("test"));
 	post_routine();
 	while (1) {
 		print_limits();
