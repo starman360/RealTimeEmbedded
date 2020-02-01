@@ -9,7 +9,11 @@ typedef int bool;
 #define false 0
 
 void timerInit(void);
+void timerIEN(bool val);
 void timerEN(bool);
 int* getBins(void);
 int getBinVal(int);
+int getCapturedTime(void);
+int getStatus(void);
+int getTimeCounter(void);
 #endif

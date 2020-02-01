@@ -2,7 +2,7 @@
 #define TIMER_CONTROL_H
 #include <stdio.h>
 
-void controller(void);
+void loop(void);
 void wait_enter(void);
 void print_limits(void);
 void change_limits(void);

@@ -22,8 +22,7 @@
 #define RUN_TEST_AGAIN "\r\nRun the test again (y|n):"
 
 
-void controller() {
-	post_routine();
+void loop() {
 	while (1) {
 		print_limits();
 		change_limits();

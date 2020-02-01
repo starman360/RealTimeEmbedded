@@ -3,17 +3,14 @@
 #include "LED.h"
 #include "UART.h"
 #include "timing_control.h"
-#include "timer.h"
-
+#include "post.h"
 #include <string.h>
 #include <stdio.h>
 
 int main(void){
-	System_Clock_Init(); // Switch System Clock = 80 MHz
-	LED_Init();
-	timerInit();
-	UART2_Init();
-	controller();
+	PROJ1_INIT();
+	POST();
+	loop();
 }
 
 

@@ -1,4 +1,10 @@
+#ifndef POST_H
+#define POST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
-int post_routine(void);
+
+int POST(void);
+void PROJ1_INIT(void);
+#endif
