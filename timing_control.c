@@ -18,7 +18,7 @@
 #define INVALID_NUMBER_ENTERED "\r\nNot a valid lower limit"
 #define INVALID_ENTRY "\r\nNot a valid entry\r\n"
 #define WAIT_ENTER "Press enter to begin timing test\r\n"
-#define BEGIN_TIMING_TEST "Running timing test"
+#define BEGIN_TIMING_TEST "Running timing test\r\n"
 #define RUN_TEST_AGAIN "\r\nRun the test again (y|n):"
 
 
@@ -29,14 +29,21 @@ void loop() {
 		wait_enter();
 		USART_Write(USART2, (uint8_t *)BEGIN_TIMING_TEST, strlen(BEGIN_TIMING_TEST));
 		timerEN(1);
-		for (int i = 0; i < 100; i++) {
-			uint8_t buffer[BufferSize]; 
-			int n = sprintf((char *)buffer, "binValue = %d\t", getBinVal(i));
-			USART_Write(USART2, (uint8_t *) buffer, n);
+		timerIEN(1);
+		while(!done);
+		done = 0;
+		for (int i = 0; i <= 100; i++) {
+			int binval = getBinVal(i);
+			if (binval != 0){
+				uint8_t buffer[BufferSize]; 
+				int n = sprintf((char *)buffer, "%d\t%d\r\n",i+lower_limit, binval);
+				USART_Write(USART2, (uint8_t *) buffer, n);
+			}
 		}
 		if (run_again()) {
 			break;
 		}
+		iter = 1000;
 	}
 }
 
@@ -154,3 +161,5 @@ int run_again() {
 		}
 	}
 }
+
+
