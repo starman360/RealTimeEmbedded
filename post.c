@@ -10,45 +10,41 @@
 #include "stdVars.h"
 //#define DEBUG
 
-#define MAX_TIME 100000
-#define GETALIFE 1
-
-#define POST_ROUTINE_COMPLETE 	"POST routine finished successfully.\t\r\n"
-#define POST_ROUTINE_FAILED		"POST routine failed.\r\t\n"
-int POST() {
+int post() {
+	char rxByte;
 	int watchdog = 0;
-	timerEN(1);
+	timer_EN(1);
 	int TC = 0;
-	while(!getStatus()){
-		TC = getTimeCounter();
+	while(!get_status()){
+		TC = get_time_counter();
 		if (TC > 200000){
 			watchdog = 1;
 			break;
 		}
 	}
-	if (watchdog){ // HANDLE ERROR
-		USART_Write(USART2, (uint8_t *)POST_ROUTINE_FAILED, strlen(POST_ROUTINE_FAILED));			
+	if (watchdog){ // Handle Error
+		USART_Write(USART2, (uint8_t *)POST_ROUTINE_FAILED, strlen(POST_ROUTINE_FAILED));	
+		USART_Write(USART2, (uint8_t *)POST_ROUTINE_RESTART, strlen(POST_ROUTINE_RESTART));			
+		rxByte = USART_Read(USART2);
+		if (rxByte == 'N' || rxByte == 'n') {
+			return 1;
+		}
+		return 0;
 	}
-	else { // WE GOOCH
+	else { // On Success
 		USART_Write(USART2, (uint8_t *)POST_ROUTINE_COMPLETE, strlen(POST_ROUTINE_COMPLETE));
+		post_complete = 1;
 	}
 	
-	timerEN(0); // Turn off timer
+	timer_EN(0); // Turn off timer
 	return 0;
 }
-void PROJ1_INIT(void){
+
+
+void proj1_init(void){
 	System_Clock_Init(); // Switch System Clock = 80 MHz
 	LED_Init();
-	timerInit();
+	timer_Init();
 	GPIO_Init();
 	UART2_Init();
 }
-
-/*
-	while(1){
-		if (ISRFLAG) {
-			ISRFLAG = 0;
-			USART_Write(USART2, (uint8_t *)POST_ROUTINE_COMPLETE, strlen(POST_ROUTINE_COMPLETE));
-		}
-	}
-*/

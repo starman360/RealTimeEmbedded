@@ -5,6 +5,6 @@
 #include <stdlib.h>
 
 
-int POST(void);
-void PROJ1_INIT(void);
+int post(void);
+void proj1_init(void);
 #endif

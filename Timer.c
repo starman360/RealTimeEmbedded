@@ -1,11 +1,12 @@
 #include "Timer.h"
 #include "UART.h"
 #include "string.h"
+
 int bins[101];
 int oldtimerVal = 0;
 
 
-void timerInit(void) {
+void timer_Init(void) {
 		iter = 1000;
     RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
     TIM2->PSC |= 0x4F;               // Loading the value 79 into prescaler reg
@@ -18,14 +19,14 @@ void timerInit(void) {
 		TIM2->CCER |= TIM_CCER_CC1E;
 }
 
-void timerIEN(bool val){
+void timer_IEN(bool val){
 	if (val)	
 		TIM2->DIER |= TIM_DIER_CC1IE; // Interrupt Enable
 	else
 		TIM2->DIER &= ~TIM_DIER_CC1IE; // Interrupt Enable
 }
 
-void timerEN(bool val)
+void timer_EN(bool val)
 {
     if (val) {
         TIM2->CR1 |= TIM_CR1_CEN;
@@ -41,23 +42,23 @@ void timerEN(bool val)
 
 
 
-int* getBins(void) {
+int* get_bins(void) {
 	return bins;
 }
 
-int getBinVal(int i) {
+int get_bin_val(int i) {
 	return bins[i];
 }
 
-int getCapturedTime(void) {
+int get_captured_time(void) {
 		return TIM2->CCR1;
 }
 
-int getStatus(void) {
+int get_status(void) {
 	return TIM2->SR & TIM_SR_CC1IF;
 }
 
-int getTimeCounter(void) {
+int get_time_counter(void) {
 	return TIM2->CNT;
 }
 
@@ -67,9 +68,14 @@ void TIM2_IRQHandler(void) {
 	oldtimerVal = newtimerVal;
 	if (timerVal - lower_limit >= 0 && timerVal - lower_limit <= 100)
 		bins[timerVal - lower_limit]++;
-	if (iter) iter--;
+	if (iter >= 0) iter--;
 	else {
-		timerEN(0);
+		timer_EN(0);
 		done = 1;
 	}
+}
+
+void reset_timer(void){
+	for (int i = 0; i <= 100; i++) bins[i] = 0;
+	iter = 1000;
 }

@@ -10,30 +10,18 @@
 #include "Timer.h"
 #include "stdVars.h"
 
-#define ENTER_KEY 0x0D
-#define BACKSPACE_KEY 0x7F
-#define CHANGE_LOWER_LIMIT_Q "Change lower limit (y|n):"
-#define ENTER_LOWER_LIMIT "\r\nEnter lower limit: "
-#define OUT_OF_RANGE_LIMIT "\r\nLower limit out of range. Select between 50-9950"
-#define INVALID_NUMBER_ENTERED "\r\nNot a valid lower limit"
-#define INVALID_ENTRY "\r\nNot a valid entry\r\n"
-#define WAIT_ENTER "Press enter to begin timing test\r\n"
-#define BEGIN_TIMING_TEST "Running timing test\r\n"
-#define RUN_TEST_AGAIN "\r\nRun the test again (y|n):"
-
-
 void loop() {
 	while (1) {
 		print_limits();
 		change_limits();
 		wait_enter();
 		USART_Write(USART2, (uint8_t *)BEGIN_TIMING_TEST, strlen(BEGIN_TIMING_TEST));
-		timerEN(1);
-		timerIEN(1);
+		timer_EN(1);
+		timer_IEN(1);
 		while(!done);
 		done = 0;
 		for (int i = 0; i <= 100; i++) {
-			int binval = getBinVal(i);
+			int binval = get_bin_val(i);
 			if (binval != 0){
 				uint8_t buffer[BufferSize]; 
 				int n = sprintf((char *)buffer, "%d\t%d\r\n",i+lower_limit, binval);
@@ -43,7 +31,7 @@ void loop() {
 		if (run_again()) {
 			break;
 		}
-		iter = 1000;
+		reset_timer();
 	}
 }
 

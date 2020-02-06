@@ -4,16 +4,14 @@
 #include "stm32l476xx.h"
 #include "stdVars.h"
 
-typedef int bool;
-#define true 1
-#define false 0
+void timer_Init(void);
+void timer_IEN(bool val);
+void timer_EN(bool);
+int* get_bins(void);
+int get_bin_val(int);
+int get_captured_time(void);
+int get_status(void);
+int get_time_counter(void);
+void reset_timer(void);
 
-void timerInit(void);
-void timerIEN(bool val);
-void timerEN(bool);
-int* getBins(void);
-int getBinVal(int);
-int getCapturedTime(void);
-int getStatus(void);
-int getTimeCounter(void);
 #endif
