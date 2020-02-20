@@ -6,5 +6,5 @@
 
 
 int post(void);
-void proj1_init(void);
+void proj2_init(void);
 #endif

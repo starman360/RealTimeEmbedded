@@ -467,6 +467,36 @@
               <FileType>1</FileType>
               <FilePath>.\GPIO.c</FilePath>
             </File>
+            <File>
+              <FileName>PWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\PWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Servo.h</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_input.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\user_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_input.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\user_input.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
