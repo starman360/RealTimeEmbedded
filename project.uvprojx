@@ -467,6 +467,26 @@
               <FileType>1</FileType>
               <FilePath>.\GPIO.c</FilePath>
             </File>
+            <File>
+              <FileName>servo_input.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\servo_input.c</FilePath>
+            </File>
+            <File>
+              <FileName>servo_input.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\servo_input.h</FilePath>
+            </File>
+            <File>
+              <FileName>recipes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\recipes.c</FilePath>
+            </File>
+            <File>
+              <FileName>recipes.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\recipes.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
