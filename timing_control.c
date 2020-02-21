@@ -5,7 +5,6 @@
 
 #include "stm32l476xx.h"
 #include "UART.h"
-#include "post.h"
 #include "timing_control.h"
 #include "Timer.h"
 #include "stdVars.h"

@@ -24,27 +24,27 @@ void process_input() {
 		switch(cmd[i]) {
 			case 'P':
 			case 'p':
-				// motor control here
+				// paused servo 1 or 2 here
 				break;
 			case 'C':
 			case 'c':
-				// motor control here
+				// unpause servo 1 or 2 here
 				break;
 			case 'R':
 			case 'r':
-				// motor control here
+				// move servo 1 or 2 one position to the right (as long as it is not pos 0)
 				break;
 			case 'L':
 			case 'l':
-				// motor control here
+				// move servo 1 or 2 one position to the left (as long as it is not pos 5)
 				break;
 			case 'N':
 			case 'n':
-				// motor control here
+				// No-op ignore for servo 1 or two 
 				break;
 			case 'B':
 			case 'b':
-				// motor control here
+				// Start or retarst recipe
 				break;
 			
 			default:

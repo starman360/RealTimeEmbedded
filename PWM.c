@@ -64,9 +64,21 @@ void pwm2_Init(void){
 	
 }	
 
-void pwm_Set_DC(int val){ //DEAUTY CYCLE
-	TIM2->CCR1 |= val;
-	TIM2->EGR |= TIM_EGR_UG;         // Update
+
+/*
+	Changes the position of a servo by updating the duty cycle
+	val - new duty cycle value
+	servo_id - controls which servo to move
+*/
+void pwm_Set_DC(int val, int servo_id) {
+	if (servo_id == 1) {
+		TIM2->CCR1 |= val;
+	}
+	if (servo_id == 2) {
+		TIM2->CCR2 = val;
+	}
+	// update duty cycle 
+	TIM2->EGR |= TIM_EGR_UG;    
 }
 
 void pwm_EN(bool val)

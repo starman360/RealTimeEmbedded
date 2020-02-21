@@ -418,16 +418,6 @@
               <FilePath>.\pins.txt</FilePath>
             </File>
             <File>
-              <FileName>post.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\post.c</FilePath>
-            </File>
-            <File>
-              <FileName>post.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\post.h</FilePath>
-            </File>
-            <File>
               <FileName>timing_control.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\timing_control.c</FilePath>
