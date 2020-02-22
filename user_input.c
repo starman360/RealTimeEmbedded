@@ -7,87 +7,80 @@
 #include "UART.h"
 #include "stdVars.h"
 
-#define CMD_LENGTH 2
-
-char cmd[CMD_LENGTH];
+int cmdPos = 1;
 
 void delay(void) {
 	for (int i = 0; i < 200000; i++);
 }
 
-void process_input() {
-	for (int i = 0; i < SERVO_COUNT; i ++) {
-		switch(cmd[i]) {
-			case 'P':
-			case 'p':
-				// paused servo 1 or 2 here
-				break;
-			case 'C':
-			case 'c':
-				// unpause servo 1 or 2 here
-				break;
-			case 'R':
-			case 'r':
-				// move servo 1 or 2 one position to the right (as long as it is not pos 0)
-				break;
-			case 'L':
-			case 'l':
-				// move servo 1 or 2 one position to the left (as long as it is not pos 5)
-				break;
-			case 'N':
-			case 'n':
-				// No-op ignore for servo 1 or two 
-				break;
-			case 'B':
-			case 'b':
-				// Start or retarst recipe
-				break;
-			
-			default:
-				// no valid command entered
-				USART_Write(USART2, (uint8_t *)"\r\nInvalid Command\r\n>", 18);
-		}
+void process_command(Cmd *cmd, Servo *s){
+	char *c;
+	if (s->id == 1) *c = cmd->s1_cmd;
+	if (s->id == 2) *c = cmd->s2_cmd;
+	
+	switch(*c) {
+		case 'p':
+			s->enable = 0; // paused servo 1 or 2 here
+			break;
+		case 'c':
+			s->enable = 1; // unpause servo 1 or 2 here
+			break;
+		case 'r':
+			if (s->pos > MIN_POS) s->pos --; // move servo 1 or 2 one position to the right (as long as it is not pos 0)
+			break;
+		case 'l':
+			if (s->pos < MAX_POS) s->pos ++;// move servo 1 or 2 one position to the left (as long as it is not pos 5)
+			break;
+		case 'n':
+			// No-op ignore
+			break;
+		case 'b':
+			s->instruction_index = 0;  // Start or tratser recipe
+			break;
+		default:
+			// no valid command entered
+			//USART_Write(USART2, (uint8_t *)"\r\nInvalid Command\r\n>", 18);
+			break;
 	}
 }
 
-int input() {
-	int status = 0; // input not finished
-	char rxByte;
-	static int index;
+void process_recipe(){
+	// SERVO 1
 	
+}
+
+char toLowercase(char c) {
+	if (c >= 0x61 && c <= 0x7a)
+		return (c - 0x20);
+	return c;
+}
+
+
+int input(Cmd *cmd) {
+	char rxByte = '0';
 	rxByte = USART_Read(USART2);
-	
-	// user interrupt
-	if(rxByte == 'x' || rxByte == 'X'){
-		index = 0;
+	rxByte = toLowercase(rxByte);
+		
+	if(rxByte == 'x'){
+		cmd->s1_cmd = 0;
+		cmd->s2_cmd = 0;
+		cmdPos = 1;
 		USART_Write(USART2, (uint8_t *)USER_INTERRUPT_PRINT, strlen(USER_INTERRUPT_PRINT));
+		return 0;
+	}		
+	if(rxByte == CR){
+		cmdPos = 1;
+		USART_Write(USART2, (uint8_t *)USER_INTERRUPT_PRINT, strlen(USER_INTERRUPT_PRINT));
+		return 1;
 	}
-	// user pressed enter AND two characters have been entered
-	else if (rxByte == CR && index == CMD_LENGTH ) {
-		process_input();
-		status = 1; // input finished
-	}
-	// user pressed backspace 
-	else if (rxByte == BACKSPACE && index > 0) {
-		index--;
-		USART_Write(USART2, (uint8_t *)&rxByte, sizeof(char)); // echo 
-	}
-	// add character
-	else {
-		// cr and backspace are not considered characters
-		if (rxByte == CR || rxByte == BACKSPACE) {
-			return status;
-		}
-		// extra characters being entered situation
-		if (rxByte != CR && index == CMD_LENGTH) {
-			return status;
-		// add the character
-		} else {
-			cmd[index] = rxByte;
-			USART_Write(USART2, (uint8_t *)&rxByte, sizeof(char)); // echo
-			index++;
-		}
-	}
-	delay();
-	return status;
+
+	if (cmdPos == 1)
+		cmd->s1_cmd = rxByte;
+	if (cmdPos == 2)
+		cmd->s2_cmd = rxByte;
+
+	cmdPos++;
+	
+	return 0;
+	
 }

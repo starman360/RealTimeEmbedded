@@ -7,19 +7,32 @@
 #include "stdVars.h"
 #include "servo.h"
 #include "recipe_instructions.h"
+#include "user_input.h"
+
+#define length(A) sizeof(A)/sizeof(A[0])
 
 int main(void){
 	System_Clock_Init();
 	LED_Init();
 	UART2_Init();
 	GPIO_Init();
-	shawn_pwn();
-
-	init_servo(&ch1_servo, 1, base_recipe[0], sizeof(base_recipe[0])/sizeof(base_recipe[0][0]));
-	init_servo(&ch2_servo, 2, base_recipe[1], sizeof(base_recipe[1])/sizeof(base_recipe[1][0]));
+	pwm_init();
+	
+	Cmd cmd;
+	
+	init_servo(&ch1_servo, 1);
+	init_servo(&ch2_servo, 2);
 	
 	while(1){
-		
+		if(input(&cmd)){
+			process_command(&cmd, &ch1_servo);
+			process_command(&cmd, &ch2_servo);
+		}
+		process_recipe();
+		//DELAY
+		// Deal with Input
+		// Eecute command
+		// Increment pos
 	}
 }
 

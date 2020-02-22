@@ -468,14 +468,14 @@
               <FilePath>.\user_input.h</FilePath>
             </File>
             <File>
-              <FileName>recipe_instructions.c</FileName>
+              <FileName>cookbook.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\recipe_instructions.c</FilePath>
+              <FilePath>.\cookbook.c</FilePath>
             </File>
             <File>
-              <FileName>recipe_instructions.h</FileName>
+              <FileName>cookbook.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\recipe_instructions.h</FilePath>
+              <FilePath>.\cookbook.h</FilePath>
             </File>
           </Files>
         </Group>

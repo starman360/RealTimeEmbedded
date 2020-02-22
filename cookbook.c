@@ -1,4 +1,8 @@
-#include "recipe_instructions.h"
+#include "cookbook.h"
+
+int lookup(int recipe_num, int i){
+	return base_recipe[recipe_num][i];
+}
 
 /* Required recipe */
 uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
