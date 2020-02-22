@@ -1,49 +1,13 @@
 #include "Servo.h"
 
-/* Required recipe */
-uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
-	{
-		MOV+0,
-		MOV+5,
-		MOV+0,
-		MOV+3,
-		LOOP+0,
-		MOV+1,
-		MOV+4,
-		END_LOOP,
-		MOV+0,
-		MOV+2,
-		WAIT+0,
-		MOV+3,
-		WAIT+0,
-		MOV+2,
-		MOV+3,
-		WAIT+31,
-		WAIT+31,
-		WAIT+31,
-		MOV+4,
-		RECIPE_END
-	},
-	{
-		MOV+0,
-		MOV+5,
-		MOV+0,
-		MOV+3,
-		LOOP+0,
-		MOV+1,
-		MOV+4,
-		END_LOOP,
-		MOV+0,
-		MOV+2,
-		WAIT+0,
-		MOV+3,
-		WAIT+0,
-		MOV+2,
-		MOV+3,
-		WAIT+31,
-		WAIT+31,
-		WAIT+31,
-		MOV+4,
-		RECIPE_END
+void init_servo(Servo *servo, int id, uint8_t recipe[], int recipe_size) {
+	servo->id = id;
+	servo->instruction_index = 0;
+	servo->loop_start_index = 0;
+	servo->in_loop = 0;
+	servo->is_paused = 1;
+	
+	for (int i = 0; i < recipe_size; i++) {
+		servo->recipe_instructions[i] = recipe[i];
 	}
-};
+}

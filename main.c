@@ -5,6 +5,8 @@
 #include "PWM.h"
 #include "GPIO.h"
 #include "stdVars.h"
+#include "servo.h"
+#include "recipe_instructions.h"
 
 int main(void){
 	System_Clock_Init();
@@ -12,7 +14,10 @@ int main(void){
 	UART2_Init();
 	GPIO_Init();
 	shawn_pwn();
-	Green_LED_On();
+
+	init_servo(&ch1_servo, 1, base_recipe[0], sizeof(base_recipe[0])/sizeof(base_recipe[0][0]));
+	init_servo(&ch2_servo, 2, base_recipe[1], sizeof(base_recipe[1])/sizeof(base_recipe[1][0]));
+	
 	while(1){
 		
 	}

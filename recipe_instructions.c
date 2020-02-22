@@ -1,0 +1,49 @@
+#include "recipe_instructions.h"
+
+/* Required recipe */
+uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
+	{
+		MOV+0,
+		MOV+5,
+		MOV+0,
+		MOV+3,
+		LOOP+0,
+		MOV+1,
+		MOV+4,
+		END_LOOP,
+		MOV+0,
+		MOV+2,
+		WAIT+0,
+		MOV+3,
+		WAIT+0,
+		MOV+2,
+		MOV+3,
+		WAIT+31,
+		WAIT+31,
+		WAIT+31,
+		MOV+4,
+		RECIPE_END
+	},
+	{
+		MOV+0,
+		MOV+5,
+		MOV+0,
+		MOV+3,
+		LOOP+0,
+		MOV+1,
+		MOV+4,
+		END_LOOP,
+		MOV+0,
+		MOV+2,
+		WAIT+0,
+		MOV+3,
+		WAIT+0,
+		MOV+2,
+		MOV+3,
+		WAIT+31,
+		WAIT+31,
+		WAIT+31,
+		MOV+4,
+		RECIPE_END
+	}
+};

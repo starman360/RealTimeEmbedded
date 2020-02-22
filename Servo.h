@@ -21,14 +21,17 @@
 typedef struct Servo Servo;
 
 struct Servo {
-	int instruction_index; // current instruction index in recipe_instructions
-	int in_loop;
-	// int loop_index; // not sure we need this?
-	int is_paused;
-	int is_running;
-	uint8_t recipe_instructions[RECIPE_INSTR_LEN];
-		
+	int id;									// map id to channel
+	
+	int instruction_index; 	// current instruction index in recipe_instructions
+	int loop_start_index;  	// index of where a loop begins
+	int in_loop;						// status flag for in a loop
+	int in_error;						// status flag for encountering recipe error
+	int is_paused;					// status flag for servo running/paused
+	int recipe_instructions[RECIPE_INSTR_LEN]; // set of instructions
 };
+
+void init_servo(Servo *servo, int id, uint8_t recipe[], int recipe_size);
 // functions we will need
 /*
  move, loop control, wait

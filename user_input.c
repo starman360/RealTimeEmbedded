@@ -5,13 +5,9 @@
 #include "user_input.h"
 #include "stm32l476xx.h"
 #include "UART.h"
+#include "stdVars.h"
 
-#define SERVO_COUNT 2
-#define USER_INTERRUPT_PRINT "\r\n>"
-#define INVALID_COMMAND "\r\nInvalid command entered"
 #define CMD_LENGTH 2
-#define BACKSPACE 0x7F
-#define CR 0x0D
 
 char cmd[CMD_LENGTH];
 

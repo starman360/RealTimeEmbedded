@@ -418,26 +418,6 @@
               <FilePath>.\pins.txt</FilePath>
             </File>
             <File>
-              <FileName>timing_control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\timing_control.c</FilePath>
-            </File>
-            <File>
-              <FileName>timing_control.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\timing_control.h</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Timer.h</FilePath>
-            </File>
-            <File>
               <FileName>stdVars.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\stdVars.h</FilePath>
@@ -486,6 +466,16 @@
               <FileName>user_input.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\user_input.h</FilePath>
+            </File>
+            <File>
+              <FileName>recipe_instructions.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\recipe_instructions.c</FilePath>
+            </File>
+            <File>
+              <FileName>recipe_instructions.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\recipe_instructions.h</FilePath>
             </File>
           </Files>
         </Group>
