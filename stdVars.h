@@ -16,5 +16,5 @@ typedef int bool;
 
 extern Servo ch1_servo;
 extern Servo ch2_servo;
-
+extern int timerFlag;
 #endif

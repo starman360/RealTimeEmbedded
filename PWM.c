@@ -1,7 +1,7 @@
 #include "PWM.h"
 
 //USING TIMER 2
-void pwm_init() {
+void pwm_Init() {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
 	TIM2->PSC |= 0x4F;
 	
@@ -30,7 +30,7 @@ void pwm_init() {
 */
 void pwm_Set_DC(int val, int servo_id) {
 	if (servo_id == 1) {
-		TIM2->CCR1 |= val;
+		TIM2->CCR1 = val;
 	}
 	if (servo_id == 2) {
 		TIM2->CCR2 = val;

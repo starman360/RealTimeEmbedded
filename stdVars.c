@@ -2,3 +2,4 @@
 
 Servo ch1_servo;
 Servo ch2_servo;
+int timerFlag;

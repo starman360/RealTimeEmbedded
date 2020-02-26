@@ -1,11 +1,11 @@
 #include "cookbook.h"
 
 int lookup(int recipe_num, int i){
-	return base_recipe[recipe_num][i];
+	return cookbk[recipe_num][i];
 }
 
 /* Required recipe */
-uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
+uint8_t cookbk[3][64] = {
 	{
 		MOV+0,
 		MOV+5,
@@ -14,7 +14,8 @@ uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
 		LOOP+0,
 		MOV+1,
 		MOV+4,
-		END_LOOP,
+		//END_LOOP,
+		/*
 		MOV+0,
 		MOV+2,
 		WAIT+0,
@@ -27,6 +28,7 @@ uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
 		WAIT+31,
 		MOV+4,
 		RECIPE_END
+		*/
 	},
 	{
 		MOV+0,
@@ -36,7 +38,8 @@ uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
 		LOOP+0,
 		MOV+1,
 		MOV+4,
-		END_LOOP,
+		//END_LOOP,
+		/*
 		MOV+0,
 		MOV+2,
 		WAIT+0,
@@ -49,5 +52,12 @@ uint8_t base_recipe[2][RECIPE_INSTR_LEN] = {
 		WAIT+31,
 		MOV+4,
 		RECIPE_END
+		*/
+	},
+	{
+		LOOP+0,
+		MOV+1,
+		MOV+4,
+		END_LOOP,
 	}
 };

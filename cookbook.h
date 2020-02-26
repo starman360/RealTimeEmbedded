@@ -16,7 +16,8 @@
 #define OP_MASK (224)
 #define PARAM_MASK (31)
 
-extern uint8_t base_recipe[2][420];
+extern uint8_t cookbk[3][64];
 int lookup(int recipe_num, int i);
+
 
 #endif
