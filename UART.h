@@ -11,6 +11,8 @@ void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
 void USART_Init(USART_TypeDef * USARTx);
 void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer, uint32_t nBytes);
+void USART_iWrite(USART_TypeDef * USARTx, int buffer);
+void USART_iWriteln(USART_TypeDef * USARTx, int buffer);
 uint8_t   USART_Read(USART_TypeDef * USARTx);
 uint8_t   USART_Read_nb(USART_TypeDef * USARTx);
 void USART_Delay(uint32_t us);

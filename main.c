@@ -35,17 +35,15 @@ int main(void){
 			if(input(&cmd)){
 				process_command(&cmd, &ch1_servo);
 				process_command(&cmd, &ch2_servo);
-				print_status(&ch1_servo);
-				print_status(&ch2_servo);
+//				print_status(&ch1_servo);
+//				print_status(&ch2_servo);
 			}
-			//run(&ch1_servo);
-			//run(&ch2_servo);
-			//print_status(&ch1_servo);
-			//print_status(&ch2_servo);
+			run(&ch1_servo);
+			run(&ch2_servo);
+
 			
 			//DELAY
 			// Deal with Input
-			
 			// Eecute command
 			// Increment pos
 		}

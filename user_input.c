@@ -16,6 +16,10 @@ void process_command(Cmd *cmd, Servo *s){
 	if (s->id == 1) c = cmd->s1_cmd;
 	if (s->id == 2) c = cmd->s2_cmd;
 	
+	USART_Write(USART2, (uint8_t *)"char: ", sizeof("char: "));
+	USART_Write(USART2, (uint8_t *)&c, sizeof(char));
+	USART_Write(USART2, (uint8_t *)"\r\n", sizeof("\r\n"));
+	
 	switch(c) {
 		case 'P':
 			s->enable = 0; // paused servo 1 or 2 here
@@ -50,7 +54,7 @@ void process_command(Cmd *cmd, Servo *s){
 }
 
 
-char toLowercase(char c) {
+char toUppercase(char c) {
 	if (c >= 0x61 && c <= 0x7a)
 		return (c - 0x20);
 	return c;
@@ -59,8 +63,10 @@ char toLowercase(char c) {
 
 int input(Cmd *cmd) {
 	char rxByte = '0';
-	rxByte = USART_Read(USART2);
-		
+	rxByte = USART_Read_nb(USART2);
+	
+	if(rxByte == 0) return 0; // If nothing exit
+	
 	if(rxByte == 'x'){
 		cmd->s1_cmd = 0;
 		cmd->s2_cmd = 0;
@@ -77,12 +83,12 @@ int input(Cmd *cmd) {
 	// echo back input
 	USART_Write(USART2, (uint8_t *)&rxByte, sizeof(char));
 	// all input converted to lowercase
-	rxByte = toLowercase(rxByte);
+	rxByte = toUppercase(rxByte);
+		
 	if (cmdPos == 1)
 		cmd->s1_cmd = rxByte;
 	if (cmdPos == 2)
 		cmd->s2_cmd = rxByte;
-	
 	cmdPos++;
 	return 0;
 	

@@ -1,5 +1,7 @@
 #include "UART.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // UART Ports:
 // ===================================================
@@ -130,6 +132,18 @@ void USART_Write(USART_TypeDef * USARTx, uint8_t *buffer, uint32_t nBytes) {
 	USARTx->ISR &= ~USART_ISR_TC;
 }   
  
+
+void USART_iWrite(USART_TypeDef * USARTx, int integer){
+	uint8_t buffer[64]; 
+	int n = sprintf((char *)buffer, "%d", integer);
+	USART_Write(USART2, (uint8_t *) buffer, n);
+}
+
+void USART_iWriteln(USART_TypeDef * USARTx, int integer){
+	uint8_t buffer[64]; 
+	int n = sprintf((char *)buffer, "%d\r\n", integer);
+	USART_Write(USART2, (uint8_t *) buffer, n);
+}
 
 void USART_Delay(uint32_t us) {
 	uint32_t time = 100*us/7;    

@@ -10,6 +10,6 @@ typedef struct Cmd {
 
 void process_command(Cmd *cmd, Servo *s);
 int input(Cmd *cmd);
-char toLowercase(char);
+char toUppercase(char);
 
 #endif
