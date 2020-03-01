@@ -30,17 +30,16 @@ int main(void){
 	
 	
 	while(1){
-		if (!timerFlag){ // RUN 100ms (10Hz)
-				timerFlag = 0;				
-			if(input(&cmd)){
+//		USART_iWriteln(USART2, TIM3->SR);
+		if(input(&cmd)){
 				process_command(&cmd, &ch1_servo);
 				process_command(&cmd, &ch2_servo);
-//				print_status(&ch1_servo);
-//				print_status(&ch2_servo);
+//				
 			}
+		if (timerFlag){ // RUN 100ms (10Hz)
+				timerFlag = 0;				
 			run(&ch1_servo);
 			run(&ch2_servo);
-
 			
 			//DELAY
 			// Deal with Input

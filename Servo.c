@@ -34,6 +34,7 @@ void run(Servo *servo){
 				case MOV:
 						pwm_Set_DC(get_pwm_val(param), servo->id); // MOVE NOW
 						servo->recipe_delay = abs(servo->pos - param) * 2; // ABS VALUE OF ( POS - PARAM) -> recipe process;
+						servo->pos = param;
 						break;
 				case WAIT:
 						servo->recipe_delay += (param + 1);
@@ -50,7 +51,8 @@ void run(Servo *servo){
 						break;
 				case END_LOOP:
 						if (servo->loop_cnt){ // If loop counter is 0 then continue on
-							servo->instruction_index = servo->loop_start_index; 
+							servo->instruction_index = servo->loop_start_index;
+							servo->loop_cnt --;
 						}
 						break;
 				case RECIPE_END:
@@ -62,6 +64,7 @@ void run(Servo *servo){
 				case ANMOLDOESSOMETHINGELSE:
 						break;		
 			}
+			//print_status(servo);
 			servo->instruction_index ++;
 		}
 	}

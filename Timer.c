@@ -6,6 +6,7 @@ void timer_Init(void) {
 	
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM3EN;
 	TIM3->PSC |= 0x9E; // 2us
+	//TIM3->PSC |= 0x13C; // 2us
 	
 	TIM3->CCMR1 |= TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2; // ch1
 	TIM3->CCMR1 |= TIM_CCMR1_OC1PE; //ch1 preload enable
@@ -32,13 +33,12 @@ void timer_EN(bool val)
 	timer_IEN(1);
     if (val) {
         TIM3->CR1 |= TIM_CR1_CEN;
-				NVIC_SetPriority(TIM2_IRQn, 0);
-				NVIC_EnableIRQ(TIM2_IRQn);
+				NVIC_EnableIRQ(TIM3_IRQn);
 		}
     else
 		{
         TIM3->CR1 &= ~TIM_CR1_CEN;
-				NVIC_DisableIRQ(TIM2_IRQn);
+				NVIC_DisableIRQ(TIM3_IRQn);
 		}
 }
 
@@ -55,6 +55,7 @@ int get_time_counter(void) {
 	return TIM3->CNT;
 }
 
-void TIM2_IRQHandler(void) {
+void TIM3_IRQHandler(void) {
+	TIM3->SR &= ~(0x2);
 	timerFlag = 1;
 }

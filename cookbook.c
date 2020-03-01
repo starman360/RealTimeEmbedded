@@ -59,5 +59,6 @@ uint8_t cookbk[3][64] = {
 		MOV+1,
 		MOV+4,
 		END_LOOP,
+		RECIPE_END
 	}
 };

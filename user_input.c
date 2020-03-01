@@ -8,6 +8,7 @@
 #include "stdVars.h"
 #include "cookbook.h"
 #include "PWM.h"
+#include "Timer.h"
 
 int cmdPos = 1;
 
