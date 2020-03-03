@@ -14,8 +14,7 @@ uint8_t cookbk[3][64] = {
 		LOOP+0,
 		MOV+1,
 		MOV+4,
-		//END_LOOP,
-		/*
+		END_LOOP,
 		MOV+0,
 		MOV+2,
 		WAIT+0,
@@ -28,7 +27,6 @@ uint8_t cookbk[3][64] = {
 		WAIT+31,
 		MOV+4,
 		RECIPE_END
-		*/
 	},
 	{
 		MOV+0,
@@ -38,8 +36,11 @@ uint8_t cookbk[3][64] = {
 		LOOP+0,
 		MOV+1,
 		MOV+4,
-		//END_LOOP,
-		/*
+		LOOP+0,
+		MOV+1,
+		MOV+4,
+		END_LOOP,
+		END_LOOP,
 		MOV+0,
 		MOV+2,
 		WAIT+0,
@@ -52,13 +53,14 @@ uint8_t cookbk[3][64] = {
 		WAIT+31,
 		MOV+4,
 		RECIPE_END
-		*/
 	},
 	{
-		LOOP+0,
+		LOOP+1,
 		MOV+1,
 		MOV+4,
 		END_LOOP,
+		MOV+1,
 		RECIPE_END
 	}
+	
 };

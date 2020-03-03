@@ -9,6 +9,7 @@
 #include "cookbook.h"
 #include "PWM.h"
 #include "Timer.h"
+#include "LED.h"
 
 int cmdPos = 1;
 
@@ -49,7 +50,7 @@ void process_command(Cmd *cmd, Servo *s){
 			break;
 		default:
 			// no valid command entered
-			//USART_Write(USART2, (uint8_t *)"\r\nInvalid Command\r\n>", 18);
+			USART_Write(USART2, (uint8_t *)"\r\nInvalid Command\r\n>", 18);
 			break;
 	}
 }

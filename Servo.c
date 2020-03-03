@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-
+#include "LED.h"
 
 void init_servo(Servo *servo, int id, int recipe_num) {
 	servo->id = id;
@@ -41,13 +41,13 @@ void run(Servo *servo){
 						// WAIT FOR N >= 0 1/10th seconds
 						break;
 				case LOOP:
-						// check if already in a loop
+						// check if b in a loop
 						if (servo->loop_cnt) {
-							servo->err = 1;
+							servo->err = NEST_LOOP_ERR;
 							break;
 						}
 						servo->loop_cnt = param + 1; // iterations in loop
-						servo->loop_start_index = servo->instruction_index + 1;
+						servo->loop_start_index = servo->instruction_index;
 						break;
 				case END_LOOP:
 						if (servo->loop_cnt){ // If loop counter is 0 then continue on
@@ -62,8 +62,13 @@ void run(Servo *servo){
 				case ANMOLDOESSOMETHING:
 						break;
 				case ANMOLDOESSOMETHINGELSE:
-						break;		
+						break;
+				default:
+					servo->err = COMMAND_ERR;
+					
 			}
+			if (servo->err) servo->enable = 0;
+			status_indicator(servo);
 			//print_status(servo);
 			servo->instruction_index ++;
 		}
@@ -99,4 +104,20 @@ void print_status(Servo *servo){
 	n = sprintf((char *)buffer, "loop_cnt: %d\r\n",servo->loop_cnt);
 	USART_Write(USART2, (uint8_t *) buffer, n);
 	USART_Write(USART2, (uint8_t *)"\r\n", strlen("\r\n"));
+}
+
+void status_indicator(Servo *s){
+	if (s->enable && s->id == 1) {
+			Green_LED_On();
+		}
+	if(!s->enable && s->id == 1) {
+		Green_LED_Off();
+	}
+	if (s->err == COMMAND_ERR) {
+		Red_LED_On();
+	}
+	if (s->err == NEST_LOOP_ERR) {
+		Red_LED_On();
+		Green_LED_On();
+	}
 }

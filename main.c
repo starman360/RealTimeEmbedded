@@ -11,7 +11,7 @@
 #include "Timer.h"
 #include "string.h"
 
-#define SERVO1_RECIPE_NUM 2
+#define SERVO1_RECIPE_NUM 1
 #define SERVO2_RECIPE_NUM	2
 
 int main(void){
