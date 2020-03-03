@@ -29,6 +29,7 @@ int get_param(int cmd);
 int get_pwm_val(int servo_pos);
 void print_status(Servo *servo);
 void status_indicator(Servo *servo);
+void servo_copy(Servo *s, Servo *scp);
 // functions we will need
 /*
  move, loop control, wait

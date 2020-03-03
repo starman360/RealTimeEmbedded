@@ -59,9 +59,22 @@ void run(Servo *servo){
 						//servo->instruction_index = 0;
 						servo->enable = 0;
 						break;
-				case ANMOLDOESSOMETHING:
+				case JMP: // JMP 4
+						if (servo->id == 1){
+							servo_copy(servo, &ch1_servo_cp);
+						}
+						if (servo->id == 2){
+							servo_copy(servo, &ch2_servo_cp);
+						}
+						servo->instruction_index = param;
 						break;
-				case ANMOLDOESSOMETHINGELSE:
+				case RET:
+						if (servo->id == 1){
+							servo_copy(&ch1_servo_cp, servo);
+						}
+						if (servo->id == 2){
+							servo_copy(&ch2_servo_cp, servo);
+						}
 						break;
 				default:
 					servo->err = COMMAND_ERR;
@@ -121,3 +134,21 @@ void status_indicator(Servo *s){
 		Green_LED_On();
 	}
 }
+
+void servo_copy(Servo *s, Servo *scp){
+	scp->id = s->id;
+	scp->instruction_index = s->instruction_index;
+	scp->loop_start_index = s->loop_start_index;
+	scp->loop_cnt = s->loop_cnt;
+	scp->enable = s->enable;
+	scp->recipe_num = s->recipe_num;
+	scp->recipe_delay = s->recipe_delay;
+	scp->pos = s->pos;
+}
+
+
+
+
+
+
+
