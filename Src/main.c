@@ -171,19 +171,22 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
+  /*
   int timerDelay = 10; // In OS Ticks a.k.a. ms (i think)
 
-  status = osTimerStart (periodic_id, timerDelay);    /* Start timer */
+  status = osTimerStart (periodic_id, timerDelay);
   if (status != osOK) {
-	  /* Error: Timer could not be started */
-	  status = osTimerStop (periodic_id);                                             /* Stop timer */
+	  // Error: Timer could not be started
+	  status = osTimerStop (periodic_id);
   }
+  */
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
-
+  uint8_t buffer[13] = "Hello World\n\r";
+  HAL_UART_Transmit(&huart2, buffer, 13, HAL_MAX_DELAY);
   /* Create the thread(s) */
   /* creation of MainTask */
   MainTaskHandle = osThreadNew(StartMainTask, NULL, &MainTask_attributes);
@@ -324,7 +327,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -353,7 +356,7 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
 }
 
@@ -372,7 +375,7 @@ void StartMainTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
-  for(;;)
+	for(;;)
   {
     osDelay(1);
   }

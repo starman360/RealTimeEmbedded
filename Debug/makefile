@@ -44,8 +44,8 @@ Banksim.bin \
 all: Banksim.elf secondary-outputs
 
 # Tool invocations
-Banksim.elf: $(OBJS) $(USER_OBJS) /home/anmol/Documents/School/RealTime/Banksim/STM32L476VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "Banksim.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/anmol/Documents/School/RealTime/Banksim/STM32L476VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Banksim.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Banksim.elf: $(OBJS) $(USER_OBJS) C:\Users\Shawn\Desktop\RealTimeEmbedded\STM32L476VGTX_FLASH.ld
+	arm-none-eabi-gcc -o "Banksim.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Shawn\Desktop\RealTimeEmbedded\STM32L476VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Banksim.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
