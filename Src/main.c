@@ -46,12 +46,45 @@ RNG_HandleTypeDef hrng;
 
 UART_HandleTypeDef huart2;
 
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
+/* Definitions for MainTask */
+osThreadId_t MainTaskHandle;
+const osThreadAttr_t MainTask_attributes = {
+  .name = "MainTask",
   .priority = (osPriority_t) osPriorityNormal,
   .stack_size = 128
+};
+/* Definitions for Teller1 */
+osThreadId_t Teller1Handle;
+const osThreadAttr_t Teller1_attributes = {
+  .name = "Teller1",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128
+};
+/* Definitions for Teller2 */
+osThreadId_t Teller2Handle;
+const osThreadAttr_t Teller2_attributes = {
+  .name = "Teller2",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128
+};
+/* Definitions for Teller3 */
+osThreadId_t Teller3Handle;
+const osThreadAttr_t Teller3_attributes = {
+  .name = "Teller3",
+  .priority = (osPriority_t) osPriorityLow,
+  .stack_size = 128
+};
+/* Definitions for Heartbeat */
+osThreadId_t HeartbeatHandle;
+const osThreadAttr_t Heartbeat_attributes = {
+  .name = "Heartbeat",
+  .priority = (osPriority_t) osPriorityAboveNormal,
+  .stack_size = 128
+};
+/* Definitions for HB_Timer */
+osTimerId_t HB_TimerHandle;
+const osTimerAttr_t HB_Timer_attributes = {
+  .name = "HB_Timer"
 };
 /* Definitions for heartbeat */
 osSemaphoreId_t heartbeatHandle;
@@ -67,7 +100,12 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_RNG_Init(void);
-void StartDefaultTask(void *argument);
+void StartMainTask(void *argument);
+void StartTeller1(void *argument);
+void StartTeller2(void *argument);
+void StartTeller3(void *argument);
+void StartHB(void *argument);
+void HB_Timer_Callback(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -127,8 +165,19 @@ int main(void)
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
 
+  /* Create the timer(s) */
+  /* creation of HB_Timer */
+  HB_TimerHandle = osTimerNew(HB_Timer_Callback, osTimerPeriodic, NULL, &HB_Timer_attributes);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
+  int timerDelay = 10; // In OS Ticks a.k.a. ms (i think)
+
+  status = osTimerStart (periodic_id, timerDelay);    /* Start timer */
+  if (status != osOK) {
+	  /* Error: Timer could not be started */
+	  status = osTimerStop (periodic_id);                                             /* Stop timer */
+  }
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
@@ -136,8 +185,20 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+  /* creation of MainTask */
+  MainTaskHandle = osThreadNew(StartMainTask, NULL, &MainTask_attributes);
+
+  /* creation of Teller1 */
+  Teller1Handle = osThreadNew(StartTeller1, NULL, &Teller1_attributes);
+
+  /* creation of Teller2 */
+  Teller2Handle = osThreadNew(StartTeller2, NULL, &Teller2_attributes);
+
+  /* creation of Teller3 */
+  Teller3Handle = osThreadNew(StartTeller3, NULL, &Teller3_attributes);
+
+  /* creation of Heartbeat */
+  HeartbeatHandle = osThreadNew(StartHB, NULL, &Heartbeat_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -178,7 +239,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
   RCC_OscInitStruct.PLL.PLLM = 1;
-  RCC_OscInitStruct.PLL.PLLN = 20;
+  RCC_OscInitStruct.PLL.PLLN = 40;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
@@ -191,11 +252,11 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV2;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -204,7 +265,7 @@ void SystemClock_Config(void)
   PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_PLLSAI1;
   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_MSI;
   PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
-  PeriphClkInit.PLLSAI1.PLLSAI1N = 24;
+  PeriphClkInit.PLLSAI1.PLLSAI1N = 16;
   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
   PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
   PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
@@ -291,6 +352,7 @@ static void MX_GPIO_Init(void)
 {
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
 }
@@ -299,14 +361,14 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_StartMainTask */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the MainTask thread.
   * @param  argument: Not used 
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
+/* USER CODE END Header_StartMainTask */
+void StartMainTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
@@ -315,6 +377,86 @@ void StartDefaultTask(void *argument)
     osDelay(1);
   }
   /* USER CODE END 5 */ 
+}
+
+/* USER CODE BEGIN Header_StartTeller1 */
+/**
+* @brief Function implementing the Teller1 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTeller1 */
+void StartTeller1(void *argument)
+{
+  /* USER CODE BEGIN StartTeller1 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartTeller1 */
+}
+
+/* USER CODE BEGIN Header_StartTeller2 */
+/**
+* @brief Function implementing the Teller2 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTeller2 */
+void StartTeller2(void *argument)
+{
+  /* USER CODE BEGIN StartTeller2 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartTeller2 */
+}
+
+/* USER CODE BEGIN Header_StartTeller3 */
+/**
+* @brief Function implementing the Teller3 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTeller3 */
+void StartTeller3(void *argument)
+{
+  /* USER CODE BEGIN StartTeller3 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartTeller3 */
+}
+
+/* USER CODE BEGIN Header_StartHB */
+/**
+* @brief Function implementing the Heartbeat thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartHB */
+void StartHB(void *argument)
+{
+  /* USER CODE BEGIN StartHB */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartHB */
+}
+
+/* HB_Timer_Callback function */
+void HB_Timer_Callback(void *argument)
+{
+  /* USER CODE BEGIN HB_Timer_Callback */
+  
+  /* USER CODE END HB_Timer_Callback */
 }
 
 /**
